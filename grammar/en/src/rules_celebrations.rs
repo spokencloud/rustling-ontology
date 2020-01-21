@@ -8,24 +8,13 @@ use rustling_ontology_moment::{Weekday, Grain};
 
 pub fn rules_celebration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
 
-    // Included as Holiday but otherwise nth cycles not supported
-    b.rule_2("nth sunday of advent",
-             ordinal_check!(),
-             b.reg(r#"sunday of advent"#)?,
-             |ordinal, _| {
-                 Ok(helpers::day_of_week(Weekday::Sun)?
-                     .the_nth_after(-(4 - ordinal.value().value) - 1, &helpers::month_day(12, 25)?)?
-                     .form(Form::Celebration))
-             }
-    );
-
     b.rule_1_terminal("christmas",
-                      b.reg(r#"(?:xmas|christmas)(?: day)?"#)?,
+                      b.reg(r#"christmas(?: day)?"#)?,
                       |_| Ok(helpers::month_day(12, 25)?
                           .form(Form::Celebration))
     );
     b.rule_1_terminal("christmas eve",
-                      b.reg(r#"(?:xmas|christmas)(?: day)?(?:'s)? eve"#)?,
+                      b.reg(r#"christmas(?: day)?(?:'s)? eve"#)?,
                       |_| Ok(helpers::month_day(12, 24)?
                           .form(Form::Celebration))
     );
@@ -45,7 +34,7 @@ pub fn rules_celebration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
                           .form(Form::Celebration))
     );
     b.rule_1_terminal("MLK Day",
-                      b.reg(r#"(?:MLK|Martin Luther King,?)(?: Jr.?| Junior)? day"#)?,
+                      b.reg(r#"(?:mlk|martin luther king?)(?: junior)? day"#)?,
                       |_| {
                           let third_week_january =
                               helpers::cycle_nth_after(Grain::Week, 3, &helpers::month_day(1, 1)?)?;
@@ -54,46 +43,6 @@ pub fn rules_celebration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
                           Ok(january.intersect(&third_week_january)?.intersect(&monday)?
                               .form(Form::Celebration))
                       }
-    );
-    b.rule_1_terminal("Palm sunday",
-                      b.reg(r#"(?:palm|passion) sunday"#)?,
-                      |_| Ok(helpers::cycle_nth_after(Grain::Day, -7, &helpers::easter()?)?
-                          .form(Form::Celebration))
-    );
-    b.rule_1_terminal("Holy Thursday",
-                      b.reg(r#"(?:holy|maundy) thursday"#)?,
-                      |_| Ok(helpers::cycle_nth_after(Grain::Day, -3, &helpers::easter()?)?
-                          .form(Form::Celebration))
-    );
-    b.rule_1_terminal("Holy Friday",
-                      b.reg(r#"good friday"#)?,
-                      |_| Ok(helpers::cycle_nth_after(Grain::Day, -2, &helpers::easter()?)?
-                          .form(Form::Celebration))
-    );
-    b.rule_1_terminal("Holy Saturday",
-                      b.reg(r#"(?:holy|black) saturday|easter vigil"#)?,
-                      |_| Ok(helpers::cycle_nth_after(Grain::Day, -1, &helpers::easter()?)?
-                          .form(Form::Celebration))
-    );
-    b.rule_1_terminal("Easter",
-                      b.reg(r#"easter sunday"#)?,
-                      |_| Ok(helpers::easter()?
-                          .form(Form::Celebration))
-    );
-    b.rule_1_terminal("Easter Monday",
-                      b.reg(r#"easter monday"#)?,
-                      |_| Ok(helpers::cycle_nth_after(Grain::Day, 1, &helpers::easter()?)?
-                          .form(Form::Celebration))
-    );
-    b.rule_1_terminal("Ascension",
-                      b.reg(r#"(?:(?:the )?feast of (?:the )?)?ascension(?: holiday|thursday|day)?"#)?,
-                      |_| Ok(helpers::cycle_nth_after(Grain::Day, 39, &helpers::easter()?)?
-                          .form(Form::Celebration))
-    );
-    b.rule_1_terminal("Pentecost",
-                      b.reg(r#"(?:(?:the )?(?:feast|day) of )?pentecost"#)?,
-                      |_| Ok(helpers::cycle_nth_after(Grain::Day, 49, &helpers::easter()?)?
-                          .form(Form::Celebration))
     );
     b.rule_1_terminal("memorial day",
                       b.reg(r#"memorial day"#)?,
@@ -187,7 +136,7 @@ pub fn rules_celebration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
                       }
     );
     b.rule_1_terminal("black friday",
-                      b.reg(r#"black frid?day"#)?,
+                      b.reg(r#"black friday"#)?,
                       |_| {
                           let thursday_november = helpers::month(11)?.intersect(&helpers::day_of_week(Weekday::Fri)?)?;
                           let fourth_week_of_november = helpers::cycle_nth_after(Grain::Week, 4, &helpers::month_day(11, 1)?)?;
