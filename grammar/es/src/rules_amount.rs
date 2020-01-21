@@ -8,7 +8,7 @@ pub fn rules_percentage(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()>
     b.rule_2("<number> per cent",
         number_check!(),
         // FIXME
-        b.reg(r#"(?:%|p\.c\.|por ?cien(?:tos?)?)"#)?,
+        b.reg(r#"por ?cien(?:tos?)?"#)?,
         |number, _| Ok(PercentageValue(number.value().value()))
     );
     Ok(())
@@ -191,7 +191,7 @@ pub fn rules_temperature(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
     });
     b.rule_2("<latent temp> temp",
              temperature_check!(),
-             b.reg(r#"(?:grados?)|°"#)?,
+             b.reg(r#"grados?"#)?,
              |a, _| {
                  Ok(TemperatureValue {
                      value: a.value().value,
@@ -212,7 +212,7 @@ pub fn rules_temperature(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
     // FIXME: Check double Kelvin removal
     b.rule_2("<temp> Kelvin",
              temperature_check!(),
-             b.reg(r#"k(?:elvin)?"#)?,
+             b.reg(r#"kelvin"#)?,
              |a, _| {
                  Ok(TemperatureValue {
                      value: a.value().value,
@@ -222,7 +222,7 @@ pub fn rules_temperature(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
              });
     b.rule_2("<temp> Fahrenheit",
              temperature_check!(),
-             b.reg(r#"f(?:ah?reh?n(?:h?eit)?)?\.?"#)?,
+             b.reg(r#"fah?reh?nh?eit"#)?,
              |a, _| {
                  Ok(TemperatureValue {
                      value: a.value().value,
