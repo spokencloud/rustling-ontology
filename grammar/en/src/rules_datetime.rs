@@ -77,47 +77,47 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
     /* DATETIME - DATE - STANDALONE SINGLE GRAIN */
 
     b.rule_1_terminal("named-day",
-                      b.reg(r#"monday|mon\.?"#)?,
+                      b.reg(r#"monday"#)?,
                       |_| helpers::day_of_week(Weekday::Mon)
     );
     b.rule_1_terminal("named-day",
-                      b.reg(r#"tuesday|tues?\.?"#)?,
+                      b.reg(r#"tuesday"#)?,
                       |_| helpers::day_of_week(Weekday::Tue)
     );
     b.rule_1_terminal("named-day",
-                      b.reg(r#"wed?nesday|wed\.?"#)?,
+                      b.reg(r#"wednesday"#)?,
                       |_| helpers::day_of_week(Weekday::Wed)
     );
     b.rule_1_terminal("named-day",
-                      b.reg(r#"thursday|thu(?:rs?)?\.?"#)?,
+                      b.reg(r#"thursday"#)?,
                       |_| helpers::day_of_week(Weekday::Thu)
     );
     b.rule_1_terminal("named-day",
-                      b.reg(r#"friday|fri\.?"#)?,
+                      b.reg(r#"friday"#)?,
                       |_| helpers::day_of_week(Weekday::Fri)
     );
     b.rule_1_terminal("named-day",
-                      b.reg(r#"saturday|sat\.?"#)?,
+                      b.reg(r#"saturday"#)?,
                       |_| helpers::day_of_week(Weekday::Sat)
     );
     b.rule_1_terminal("named-day",
-                      b.reg(r#"sunday|sun\.?"#)?,
+                      b.reg(r#"sunday"#)?,
                       |_| helpers::day_of_week(Weekday::Sun)
     );
     b.rule_1_terminal("named-month",
-                      b.reg(r#"january|jan\.?"#)?,
+                      b.reg(r#"january"#)?,
                       |_| helpers::month(1)
     );
     b.rule_1_terminal("named-month",
-                      b.reg(r#"february|feb\.?"#)?,
+                      b.reg(r#"february"#)?,
                       |_| helpers::month(2)
     );
     b.rule_1_terminal("named-month",
-                      b.reg(r#"march|mar\.?"#)?,
+                      b.reg(r#"march"#)?,
                       |_| helpers::month(3)
     );
     b.rule_1_terminal("named-month",
-                      b.reg(r#"april|apr\.?"#)?,
+                      b.reg(r#"april"#)?,
                       |_| helpers::month(4)
     );
     b.rule_1_terminal("named-month",
@@ -133,23 +133,23 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| helpers::month(7)
     );
     b.rule_1_terminal("named-month",
-                      b.reg(r#"august|aug\.?"#)?,
+                      b.reg(r#"august"#)?,
                       |_| helpers::month(8)
     );
     b.rule_1_terminal("named-month",
-                      b.reg(r#"september|sept?\.?"#)?,
+                      b.reg(r#"september"#)?,
                       |_| helpers::month(9)
     );
     b.rule_1_terminal("named-month",
-                      b.reg(r#"october|oct\.?"#)?,
+                      b.reg(r#"october"#)?,
                       |_| helpers::month(10)
     );
     b.rule_1_terminal("named-month",
-                      b.reg(r#"november|nov\.?"#)?,
+                      b.reg(r#"november"#)?,
                       |_| helpers::month(11)
     );
     b.rule_1_terminal("named-month",
-                      b.reg(r#"december|dec\.?"#)?,
+                      b.reg(r#"december"#)?,
                       |_| helpers::month(12)
     );
     // Quarters identified by an ordinal are similar to months
@@ -224,11 +224,11 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                           .span_to(&helpers::day_of_week(Weekday::Sun)?, true)
     );
     b.rule_1_terminal("EOD|End of day",
-                      b.reg(r#"(?:eod|end of (?:the )?day)"#)?,
+                      b.reg(r#"(?:end of (?:the )?day)"#)?,
                       |_| helpers::hour(20, false)
     );
     b.rule_1_terminal("EOM|End of month",
-                      b.reg(r#"(?:the )?(?:eom|end of (?:the )?month)"#)?,
+                      b.reg(r#"(?:the )?(?:end of (?:the )?month)"#)?,
                       |_| {
                           let month = helpers::cycle_nth(Grain::Month, 1)?;
                           Ok(helpers::cycle_nth_after(Grain::Day, -10, &month)?
@@ -238,7 +238,7 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       }
     );
     b.rule_1_terminal("by the end of month",
-                      b.reg(r#"by (?:the )?(?:eom|end of (?:the )?month)"#)?,
+                      b.reg(r#"by (?:the )?(?:end of (?:the )?month)"#)?,
                       |_| helpers::cycle_nth(Grain::Day, 0)?
                           .span_to(&helpers::cycle_nth(Grain::Month, 0)?, true)
     );
@@ -252,7 +252,7 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       }
     );
     b.rule_1_terminal("by the end of year",
-                      b.reg(r#"by (?:the )?(?:eoy|end of (?:the )?year)"#)?,
+                      b.reg(r#"by (?:the )?(?:end of (?:the )?year)"#)?,
                       |_| {
                           let current_year = helpers::cycle_nth(Grain::Year, 0)?;
                           let end = current_year.intersect(&helpers::month(12)?)?;
@@ -1204,17 +1204,6 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
     //          datetime_check!(form!(Form::DayOfWeek{..})),
     //          |_, a| Ok(a.value().clone())
     // );
-    b.rule_2("the ides of <named-month>",
-             b.reg(r#"the ides? of"#)?,
-             datetime_check!(form!(Form::Month(_))),
-             |_, a| {
-                 let day = match a.value().form_month()? {
-                     3 | 5 | 7 | 10 => 15,
-                     _ => 13,
-                 };
-                 a.value().intersect(&helpers::day_of_month(day)?)
-             }
-    );
 //    b.rule_2("<datetime> before last",
 //             datetime_check!(),
 //             b.reg(r#"before last"#)?,
