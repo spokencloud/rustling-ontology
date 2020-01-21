@@ -5,16 +5,18 @@ use rustling_ontology_moment::{Grain, PeriodComp, Period};
 
 
 pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
+/*
     b.rule_1_terminal("seconde (unit-of-duration)",
                       b.reg(r#"seg(?:undo)?s?"#)?,
                       |_| Ok(UnitOfDurationValue::new(Grain::Second))
     );
+*/
     b.rule_1_terminal("minute (unit-of-duration)",
                       b.reg(r#"min(?:uto)?s?"#)?,
                       |_| Ok(UnitOfDurationValue::new(Grain::Minute))
     );
     b.rule_1_terminal("hour (unit-of-duration)",
-                      b.reg(r#"h(?:ora)?s?"#)?,
+                      b.reg(r#"horas?"#)?,
                       |_| Ok(UnitOfDurationValue::new(Grain::Hour))
     );
     b.rule_1_terminal("day (unit-of-duration)",
@@ -34,15 +36,15 @@ pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| Ok(UnitOfDurationValue::new(Grain::Year))
     );
     b.rule_1_terminal("quarter of an hour",
-                      b.reg(r#"(?:un )?(?:cuarto|1/4)(?: de hora)?"#)?,
+                      b.reg(r#"(?:un )?cuarto(?: de hora)?"#)?,
                       |_| Ok(DurationValue::new(PeriodComp::minutes(15).into()))
     );
     b.rule_1_terminal("half an hour",
-                      b.reg(r#"(?:media|1/2) hora"#)?,
+                      b.reg(r#"media hora"#)?,
                       |_| Ok(DurationValue::new(PeriodComp::minutes(30).into()))
     );
     b.rule_1_terminal("three-quarters of an hour",
-                      b.reg(r#"(?:(?:3|tres) cuartos?|3/4)(?: de hora)?"#)?,
+                      b.reg(r#"tres cuartos?(?: de hora)?"#)?,
                       |_| Ok(DurationValue::new(PeriodComp::minutes(45).into()))
     );
     b.rule_2("during <duration>",
