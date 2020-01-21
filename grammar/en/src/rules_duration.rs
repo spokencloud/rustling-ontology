@@ -4,10 +4,12 @@ use rustling_ontology_values::helpers;
 use rustling_ontology_moment::{Grain, PeriodComp, Period};
 
 pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
+/*
     b.rule_1_terminal("second (unit-of-duration)",
                       b.reg(r#"sec(?:ond)?s?"#)?,
                       |_| Ok(UnitOfDurationValue::new(Grain::Second))
     );
+*/
     b.rule_1_terminal("minute (unit-of-duration)",
                       b.reg(r#"min(?:ute)?s?"#)?,
                       |_| Ok(UnitOfDurationValue::new(Grain::Minute))
@@ -37,20 +39,16 @@ pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| Ok(UnitOfDurationValue::new(Grain::Year))
     );
     b.rule_1_terminal("quarter of an hour",
-                      b.reg(r#"1/4\s?h(?:our)?|(?:a\s)?quarter(?: of an |-)hour"#)?,
+                      b.reg(r#"(?:a )?quarter (?:of an )hour"#)?,
                       |_| Ok(DurationValue::new(PeriodComp::minutes(15).into()))
     );
     b.rule_1_terminal("half an hour",
-                      b.reg(r#"1/2\s?h(?:our)?|half an? hour|an? half hour"#)?,
+                      b.reg(r#"half an? hour|an? half hour"#)?,
                       |_| Ok(DurationValue::new(PeriodComp::minutes(30).into()))
     );
     b.rule_1_terminal("three-quarters of an hour",
-                      b.reg(r#"3/4\s?h(?:our)?|three(?:\s|-)quarters of an hour"#)?,
+                      b.reg(r#"three quarters of an hour"#)?,
                       |_| Ok(DurationValue::new(PeriodComp::minutes(45).into()))
-    );
-    b.rule_1_terminal("fortnight",
-                      b.reg(r#"(?:a|one)? fortnight"#)?,
-                      |_| Ok(DurationValue::new(PeriodComp::days(14).into()))
     );
     b.rule_2("<integer> <unit-of-duration>",
              integer_check_by_range!(0),
@@ -62,18 +60,6 @@ pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
              b.reg(r#"more"#)?,
              unit_of_duration_check!(),
              |integer, _, uod| Ok(DurationValue::new(PeriodComp::new(uod.value().grain, integer.value().value).into()))
-    );
-    b.rule_2_terminal("number.number hours",
-                      b.reg(r#"(\d+)\.(\d+)"#)?,
-                      b.reg(r#"hours?"#)?,
-                      |text_match, _| {
-                          Ok(DurationValue::new(
-                              PeriodComp::minutes(
-                                  helpers::decimal_hour_in_minute(text_match.group(1), text_match.group(2))?
-                              ).into()
-                          )
-                          )
-                      }
     );
     b.rule_2("<integer> and a half hours",
              integer_check_by_range!(0),
@@ -118,7 +104,7 @@ pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
     );
     b.rule_3("<number> h <number>",
              integer_check_by_range!(0),
-             b.reg(r#"h(?:ours?)?"#)?,
+             b.reg(r#"hours?"#)?,
              integer_check_by_range!(0,59),
              |hour, _, minute| {
                  let hour_period = Period::from(PeriodComp::new(Grain::Hour, hour.value().clone().value));
