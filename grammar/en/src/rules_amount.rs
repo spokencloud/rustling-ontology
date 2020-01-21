@@ -6,7 +6,7 @@ use rustling_ontology_values::helpers;
 pub fn rules_percentage(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
     b.rule_2("<number> per cent",
         number_check!(),
-        b.reg(r"(?:%|p\.c\.|per ?cents?)")?,
+        b.reg(r"per ?cents?")?,
         |number, _| Ok(PercentageValue(number.value().value()))
     );
     Ok(())
@@ -168,7 +168,7 @@ pub fn rules_temperature(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
              });
     b.rule_2("<latent temp> degrees",
              temperature_check!(|temp: &TemperatureValue| temp.latent),
-             b.reg(r#"(?:deg(?:ree?)?s?\.?)|°"#)?,
+             b.reg(r#"(?:deg(?:ree?)?s?\.?)"#)?,
              |a, _| {
                  Ok(TemperatureValue {
                      value: a.value().value,
@@ -178,7 +178,7 @@ pub fn rules_temperature(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
              });
     b.rule_2("<temp> Celcius",
              temperature_check!(|temp: &TemperatureValue| temp.latent),
-             b.reg(r#"centigrade|c(?:el[cs]?(?:ius)?)?\.?"#)?,
+             b.reg(r#"centigrade|cel[cs]ius"#)?,
              |a, _| {
                  Ok(TemperatureValue {
                      value: a.value().value,
@@ -188,7 +188,7 @@ pub fn rules_temperature(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
              });
     b.rule_2("<temp> Fahrenheit",
              temperature_check!(|temp: &TemperatureValue| temp.latent),
-             b.reg(r#"f(?:ah?rh?eh?n(?:h?eit)?)?\.?"#)?,
+             b.reg(r#"fah?reh?nh?eits?"#)?,
              |a, _| {
                  Ok(TemperatureValue {
                      value: a.value().value,
@@ -198,7 +198,7 @@ pub fn rules_temperature(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
              });
     b.rule_2("<temp> Kelvin",
              temperature_check!(),
-             b.reg(r#"k(?:elvin)?\.?"#)?,
+             b.reg(r#"kelvins?"#)?,
              |a, _| {
                  Ok(TemperatureValue {
                      value: a.value().value,
