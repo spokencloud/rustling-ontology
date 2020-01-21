@@ -188,35 +188,6 @@ pub fn rules_numbers(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                      ..IntegerValue::default()
                  })
              });
-    b.rule_1("few", b.reg(r#"un[oa]s"#)?, |_| {
-        Ok(IntegerValue {
-            value: 3,
-            grain: Some(1),
-            precision: Approximate,
-            ..IntegerValue::default()
-        })
-    });
-    b.rule_1_terminal("several",
-                      b.reg(r#"vario[ao]s"#)?,
-                      |_| IntegerValue::new_with_grain(4, 1)
-    );
-    b.rule_1_terminal("integer (numeric)",
-                      b.reg(r#"(\d{1,18})"#)?,
-                      |text_match| IntegerValue::new(text_match.group(0).parse()?));
-    b.rule_1_terminal("integer with thousands separator .",
-                      b.reg(r#"(\d{1,3}(\.\d\d\d){1,5})"#)?,
-                      |text_match| {
-                          let reformatted_string = text_match.group(1).replace(".", "");
-                          let value: i64 = reformatted_string.parse()?;
-                          IntegerValue::new(value)
-                      });
-    b.rule_1_terminal("decimal number",
-                      b.reg(r#"(\d*,\d+)"#)?,
-                      |text_match| {
-                          let reformatted_string = text_match.group(1).replace(",", ".");
-                          let value: f64 = reformatted_string.parse()?;
-                          FloatValue::new(value)
-                      });
     b.rule_3("number dot number",
              integer_check!(|integer: &IntegerValue| !integer.prefixed),
              b.reg(r#"punto|coma"#)?,
@@ -241,15 +212,8 @@ pub fn rules_numbers(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                      ..FloatValue::default()
                  })
              });
-    b.rule_1_terminal("decimal with thousands separator",
-                      b.reg(r#"(\d+(\.\d\d\d)+,\d+)"#)?,
-                      |text_match| {
-                          let reformatted_string = text_match.group(1).replace(".", "").replace(",", ".");
-                          let value: f64 = reformatted_string.parse()?;
-                          FloatValue::new(value)
-                      });
     b.rule_2("numbers prefix with -, negative or minus",
-             b.reg(r#"-|menos"#)?,
+             b.reg(r#"menos"#)?,
              number_check!(|number: &NumberValue| !number.prefixed()),
              |_, a| -> RuleResult<NumberValue> {
                  Ok(match a.value().clone() {
@@ -269,69 +233,6 @@ pub fn rules_numbers(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                              ..float
                          }
                              .into()
-                     }
-                 })
-             });
-    b.rule_2("numbers prefix with +, positive",
-             b.reg(r#"\+"#)?,
-             number_check!(|number: &NumberValue| !number.prefixed()),
-             |_, a| -> RuleResult<NumberValue> {
-                 Ok(match a.value().clone() {
-                     // checked
-                     NumberValue::Integer(integer) => {
-                         IntegerValue {
-                             prefixed: true,
-                             ..integer
-                         }
-                             .into()
-                     }
-                     NumberValue::Float(float) => {
-                         FloatValue {
-                             prefixed: true,
-                             ..float
-                         }
-                             .into()
-                     }
-                 })
-             }
-    );
-    b.rule_2("numbers suffixes (K, M, G)",
-             number_check!(|number: &NumberValue| !number.suffixed()),
-             b.reg_neg_lh(r#"([kmg])"#, r#"^[\W\$€]"#)?,
-             |a, text_match| -> RuleResult<NumberValue> {
-                 let multiplier = match text_match.group(0).as_ref() {
-                     "k" => 1000,
-                     "m" => 1000000,
-                     "g" => 1000000000,
-                     _ => return Err(RuleError::Invalid.into()),
-                 };
-                 Ok(match a.value().clone() {
-                     // checked
-                     NumberValue::Integer(integer) => {
-                         IntegerValue {
-                             value: integer.value * multiplier,
-                             suffixed: true,
-                             ..integer
-                         }
-                             .into()
-                     }
-                     NumberValue::Float(float) => {
-                         let product = float.value * (multiplier as f64);
-                         if product.floor() == product {
-                             IntegerValue {
-                                 value: product as i64,
-                                 suffixed: true,
-                                 ..IntegerValue::default()
-                             }
-                                 .into()
-                         } else {
-                             FloatValue {
-                                 value: product,
-                                 suffixed: true,
-                                 ..float
-                             }
-                                 .into()
-                         }
                      }
                  })
              });
@@ -409,13 +310,6 @@ pub fn rules_numbers(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                               "noven" => 19,
                               _ => return Err(RuleError::Invalid.into())
                           };
-                          Ok(OrdinalValue::new(value))
-                      }
-    );
-    b.rule_1_terminal("ordinal (digits)",
-                      b.reg(r#"0*(\d+)(?:[ºªoa]|\.er)"#)?,
-                      |text_match| {
-                          let value: i64 = text_match.group(1).parse()?;
                           Ok(OrdinalValue::new(value))
                       }
     );
