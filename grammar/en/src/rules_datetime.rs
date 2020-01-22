@@ -175,11 +175,11 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| helpers::cycle_nth(Grain::Day, 0)
     );
     b.rule_1_terminal("tomorrow",
-                      b.reg(r#"(?:tmrw?|tomm?or?rows?)"#)?,
+                      b.reg(r#"tomm?or?rows?"#)?,
                       |_| helpers::cycle_nth(Grain::Day, 1)
     );
     b.rule_1_terminal("the day after tomorrow",
-                      b.reg(r#"(?:the )?day after (?:tmrw?|tomm?or?rows?)"#)?,
+                      b.reg(r#"(?:the )?day after tomm?or?rows?"#)?,
                       |_| helpers::cycle_nth(Grain::Day, 2)
     );
     b.rule_1_terminal("yesterday",
@@ -621,7 +621,7 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
     /* DATETIME - DATE-PERIOD - GRAINS AS DATE INTERVALS */
 
     b.rule_1_terminal("week-end - Hour grain, from Friday evening to Sunday midnight",
-                      b.reg(r#"(?:the )?(?:week(?:\s|-)?end|wkend)"#)?,
+                      b.reg(r#"(?:the )?(?:week\s?end)"#)?,
                       |_| {
                           let friday = helpers::day_of_week(Weekday::Fri)?
                               .intersect(&helpers::hour(18, false)?)?;
