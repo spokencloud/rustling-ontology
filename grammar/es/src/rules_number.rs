@@ -188,21 +188,6 @@ pub fn rules_numbers(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                      ..IntegerValue::default()
                  })
              });
-<<<<<<< Updated upstream
-=======
-    b.rule_1("few", b.reg(r#"un[oa]s"#)?, |_| {
-        Ok(IntegerValue {
-            value: 3,
-            grain: Some(1),
-            precision: Approximate,
-            ..IntegerValue::default()
-        })
-    });
-    b.rule_1_terminal("several",
-                      b.reg(r#"vario[ao]s"#)?,
-                      |_| IntegerValue::new_with_grain(4, 1)
-    );
->>>>>>> Stashed changes
     b.rule_3("number dot number",
              integer_check!(|integer: &IntegerValue| !integer.prefixed),
              b.reg(r#"punto|coma"#)?,
