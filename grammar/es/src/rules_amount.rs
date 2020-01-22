@@ -30,11 +30,11 @@ pub fn rules_finance(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
              number_check!(),
              |a, b| helpers::compose_money_number(&a.value(), &b.value()));
     b.rule_1_terminal("$",
-        b.reg(r#"\$|d[oóò]lar(?:es)?"#)?,
+        b.reg(r#"d[oóò]lar(?:es)?"#)?,
         |_| Ok(MoneyUnitValue { unit: Some("$") })
     );
     b.rule_1_terminal("EUR",
-        b.reg(r#"€|(?:[e€]uro?s?)"#)?,
+        b.reg(r#"euro?s?"#)?,
         |_| Ok(MoneyUnitValue { unit: Some("EUR") })
     );
     b.rule_1_terminal("£",
@@ -42,11 +42,11 @@ pub fn rules_finance(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
         |_| Ok(MoneyUnitValue { unit: Some("£") })
     );
     b.rule_1_terminal("USD",
-        b.reg(r#"us[d\$]|d[oóò]lar(?:es)? (?:estadounidense|americano)s?"#)?,
+        b.reg(r#"d[oóò]lar(?:es)? (?:estadounidense|americano)s?"#)?,
         |_| Ok(MoneyUnitValue { unit: Some("USD") })
     );
     b.rule_1_terminal("CAD",
-                      b.reg(r#"cad|d[oóò]lar(?:es)? canadienses?"#)?,
+                      b.reg(r#"d[oóò]lar(?:es)? canadienses?"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("CAD") })
     );
     b.rule_1_terminal("AUD",
@@ -54,27 +54,23 @@ pub fn rules_finance(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| Ok(MoneyUnitValue { unit: Some("AUD") })
     );
     b.rule_1_terminal("Bitcoin",
-        b.reg(r#"฿|bitc[oóò]in(?:e?s)?"#)?,
+        b.reg(r#"bitc[oóò]in(?:e?s)?"#)?,
         |_| Ok(MoneyUnitValue { unit: Some("฿") })
     );
     b.rule_1_terminal("GBP",
-        b.reg(r#"gbp|libras? esterlinas?"#)?,
+        b.reg(r#"libras? esterlinas?"#)?,
         |_| Ok(MoneyUnitValue { unit: Some("GBP") })
     );
     b.rule_1_terminal("JPY",
-                      b.reg(r#"jpy|yen(?:es)?(?: japoneses?)?"#)?,
+                      b.reg(r#"yen(?:es)?(?: japoneses?)?"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("JPY") })
     );
-    b.rule_1_terminal("¥",
-                      b.reg(r#"¥"#)?,
-                      |_| Ok(MoneyUnitValue { unit: Some("¥") })
-    );
     b.rule_1_terminal("KRW",
-                      b.reg(r#"₩|krw|won(?:es)?(?: surcoreanos?)?"#)?,
+                      b.reg(r#"won(?:es)?(?: surcoreanos?)?"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("KRW") })
     );
     b.rule_1_terminal("RMB|CNH|CNY",
-                      b.reg(r#"cny|cnh|rmb|yuan(?:es)?(?: chinos?)?|renmimbis?"#)?,
+                      b.reg(r#"yuan(?:es)?(?: chinos?)?|renmimbis?"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("CNY") })
     );
     b.rule_1_terminal("INR",
@@ -82,27 +78,27 @@ pub fn rules_finance(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| Ok(MoneyUnitValue { unit: Some("INR") })
     );
     b.rule_1_terminal("HKD",
-                      b.reg(r#"hkd|d[oóò]lar(?:es)? de hong[- ]kong"#)?,
+                      b.reg(r#"d[oóò]lar(?:es)? de hong[- ]kong"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("HKD") })
     );
     b.rule_1_terminal("CHF",
-                      b.reg(r#"chf|francos suizos?"#)?,
+                      b.reg(r#"francos suizos?"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("CHF") })
     );
     b.rule_1_terminal("KR",
-                      b.reg(r#"kr|coronas?"#)?,
+                      b.reg(r#"coronas?"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("KR") })
     );
     b.rule_1_terminal("DKK",
-                      b.reg(r#"dkk|coronas? danesas?"#)?,
+                      b.reg(r#"coronas? danesas?"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("DKK") })
     );
     b.rule_1_terminal("NOK",
-                      b.reg(r#"nok|coronas? noruegas?"#)?,
+                      b.reg(r#"coronas? noruegas?"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("NOK") })
     );
     b.rule_1_terminal("SEK",
-                      b.reg(r#"sek|coronas? suecas?"#)?,
+                      b.reg(r#"coronas? suecas?"#)?,
                       |_| Ok(MoneyUnitValue { unit: Some("SEK") })
     );
     b.rule_1_terminal("cent",
@@ -201,7 +197,7 @@ pub fn rules_temperature(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
              });
     b.rule_2("<temp> Celcius",
              temperature_check!(),
-             b.reg(r#"(?:cent(?:i|í)grados?|c(?:el[cs]?(?:ius)?)?\.?)"#)?,
+             b.reg(r#"(?:cent(?:i|í)grados?|cel[cs]ius)"#)?,
              |a, _| {
                  Ok(TemperatureValue {
                      value: a.value().value,
@@ -232,7 +228,7 @@ pub fn rules_temperature(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()
              });
     b.rule_2("<latent temp> temp bajo cero",
              temperature_check!(),
-             b.reg(r#"bajo cero"#)?,
+             b.reg(r#"bajo [cz]ero"#)?,
              |a, _| {
                  Ok(TemperatureValue {
                      value: -1.0 * a.value().value,
