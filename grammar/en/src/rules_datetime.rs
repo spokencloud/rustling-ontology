@@ -1093,11 +1093,11 @@ pub fn rules_cycle(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| CycleValue::new(Grain::Month)
     );
     b.rule_1_terminal("quarter (cycle)",
-                      b.reg(r#"(?:quarter|qtr)s?"#)?,
+                      b.reg(r#"(quarters?"#)?,
                       |_| CycleValue::new(Grain::Quarter)
     );
     b.rule_1_terminal("year (cycle)",
-                      b.reg(r#"y(?:ea)?rs?"#)?,
+                      b.reg(r#"years?"#)?,
                       |_| CycleValue::new(Grain::Year)
     );
     Ok(())
