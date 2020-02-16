@@ -29,6 +29,7 @@ pub fn examples_finance(v: &mut Vec<::rustling::train::Example<Dimension>>) {
     example!(v, check_finance(2.0, Some("£"), Precision::Exact), "two pounds");
     example!(v, check_finance(20.0, Some("GBP"), Precision::Exact), "twenty british pounds", "twenty sterlings");
     example!(v, check_finance(38.0, Some("CHF"), Precision::Exact), "thirty eight swiss francs");
+    // disabled: crowns to general
     // example!(v, check_finance(447.0, Some("KR"), Precision::Exact), "four hundred fourty seven kroner", "four hundred fourty seven crowns");
     example!(v, check_finance(10000.0, Some("DKK"), Precision::Exact), "ten thousand danish kroner");
     example!(v, check_finance(100.0, Some("NOK"), Precision::Exact), "one hundred norwegian crowns", "hundred norwegian kroner");
@@ -98,7 +99,8 @@ pub fn examples_datetime(v: &mut Vec<::rustling::train::Example<Dimension>>) {
     example!(v, check_moment!(c, [2013, 2, 10, 6, 15]), "two days ago at fifteen past six am", "the day before yesterday at quarter past six am", "quarter past six in the morning two days ago");
     example!(v, check_moment!(c, [2013, 2, 12, 18, 15]), "fifteen past six pm", "quarter past six pm", "quarter past six in the evening");
     example!(v, check_moment!(c, [2013, 2, 12, 18, 15]), "precisely fifteen past six pm", "quarter past six pm sharp");
-//    example!(v, check_moment_with_precision!(c, [2013, 2, 12, 18, 15], Precision::Approximate), "approximately quarter past six in the evening", "fifteen past six in the afternoon approximately");
+    // disabled part of day
+    //    example!(v, check_moment_with_precision!(c, [2013, 2, 12, 18, 15], Precision::Approximate), "approximately quarter past six in the evening", "fifteen past six in the afternoon approximately");
     example!(v, check_moment!(c, [2013, 2, 12, 15]), "at three pm", "three pm", "three oclock pm", "three o'clock in the afternoon");
     example!(v, check_moment_with_precision!(c, [2013, 2, 12, 15], Precision::Approximate), "threeish pm", "three pm approximately", "at about three pm");
     example!(v, check_moment!(c, [2013, 2, 12, 14, 50]), "at ten to three", "at ten to three pm", "ten to three in the afternoon");
@@ -167,19 +169,17 @@ pub fn examples_datetime(v: &mut Vec<::rustling::train::Example<Dimension>>) {
     example!(v, check_moment_span!(c, [2013, 3], [2013, 6]),  "next three months");
     example!(v, check_moment_span!(c, [2011], [2013]), "last two years");
     example!(v, check_moment_span!(c, [2014], [2017]), "next three years");
-// czemu?
+//  strange behavior
 //    example!(v, check_moment_span!(c, [2013, 1, 8], [2013, 12, 13]), "january eight to december twelve twenty thirteen");
     example!(v, check_moment_span!(c, [2019, 1, 8], [2019, 12, 13]), "january eight to december twelve two thousand nineteen"); // this helps correct resolution of year in such intervals, for year current and +
     example!(v, check_moment_span!(c, [2013, 2, 14, 9, 30], [2013, 2, 14, 11, 0]), "between nine thirty and eleven on thursday");
     example!(v, check_moment_span!(c, [2013, 2, 12, 11, 30], [2013, 2, 12, 13, 30]), "eleven thirty to one thirty");
     example!(v, check_moment_span!(c, [2013, 2, 12, 4, 30, 0], [2013, 2, 26]), "within two weeks");
-// czemu?
     example!(v, check_moment!(c, [2013, 2, 12, 14]), "today at two pm", "at two pm", "two pm");
-//    example!(v, check_moment_with_direction!(c, [2013, 2, 12, 14, 0], Direction::After), "from two pm");
-//    example!(v, check_moment_with_direction!(c, [2013, 2, 12, 14, 0], Direction::Before), "until two pm", "through two pm");
     example!(v, check_moment_span!(c, [2013, 2, 12, 4, 30, 0], [2013, 2, 12, 14]), "by two pm");
-//    example!(v, check_moment!(c, [2013, 2, 13, 15, 22]), "three twenty two tomorrow");
-    example!(v, check_moment_with_direction!(c, [2013, 2, 12, 14], Direction::After), "after two pm");
+    example!(v, check_moment!(c, [2013, 2, 13, 15, 22]), "three twenty two pm tomorrow");
+    example!(v, check_moment_with_direction!(c, [2013, 2, 12, 14], Direction::After), "after two pm", "from two pm");
+    example!(v, check_moment_with_direction!(c, [2013, 2, 12, 14], Direction::Before), "until two pm", "through two pm");
     example!(v, check_moment_with_direction!(c, [2013, 2, 17], Direction::After), "after five days");
     example!(v, check_moment_with_direction!(c, [2013, 2, 12, 11], Direction::Before), "before eleven am");
     example!(v, check_moment_span!(c, [2013, 2, 13], [2013, 2, 13, 11]), "tomorrow before eleven am", "thirteenth february two thousand thirteen until eleven am");
@@ -193,7 +193,6 @@ pub fn examples_datetime(v: &mut Vec<::rustling::train::Example<Dimension>>) {
     example!(v, check_moment!(c, [2017, 05, 10]), "wednesday the tenth of may");
     example!(v, check_moment!(c, [2013, 2, 12, 9, 9]), "at nine o nine", "at nine o nine am", "at nine o nine in the morning");
     example!(v, check_moment!(c, [2013, 2, 12, 8, 25]), "at eight twenty five", "at eight twenty five am", "at eight twenty five in the morning");
-//    example!(v, check_moment_span!(c, [2017, 05, 12, 10, 32], [2017, 06, 7, 18, 22]), "friday the twelfth of may ten thirty two am to wednesday the seventh of june six twenty two pm");
 }
 
 pub fn examples_durations(v: &mut Vec<::rustling::train::Example<Dimension>>) {
