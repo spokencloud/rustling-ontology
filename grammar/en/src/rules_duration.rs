@@ -4,12 +4,11 @@ use rustling_ontology_values::helpers;
 use rustling_ontology_moment::{Grain, PeriodComp, Period};
 
 pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
-/*
     b.rule_1_terminal("second (unit-of-duration)",
                       b.reg(r#"sec(?:ond)?s?"#)?,
                       |_| Ok(UnitOfDurationValue::new(Grain::Second))
     );
-*/
+
     b.rule_1_terminal("minute (unit-of-duration)",
                       b.reg(r#"min(?:ute)?s?"#)?,
                       |_| Ok(UnitOfDurationValue::new(Grain::Minute))
