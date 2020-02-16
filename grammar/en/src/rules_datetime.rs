@@ -276,7 +276,7 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
              |a, b| {
                  let y = a.value().value * 100 + b.value().value;
                  Ok(helpers::year(y as i32)?.latent())
-             }`
+             }
     );
     b.rule_1("year as integer -1000-999",
              integer_check_by_range!(-1000, 999),
@@ -444,7 +444,7 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
              }
     );
     b.rule_2("at <time-of-day>",
-             b.reg(r#"at|@"#)?,
+             b.reg(r#"at"#)?,
              datetime_check!(form!(Form::TimeOfDay(_))),
              |_, a| Ok(a.value().clone().not_latent())
     );
@@ -464,6 +464,30 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
              b.reg(r#"(?:in the )?([ap])(?:\s|\.)?m?\.?"#)?,
              |a, text_match| {
                  let day_period = if text_match.group(1) == "a" {
+                     helpers::hour(0, false)?.span_to(&helpers::hour(12, false)?, false)?
+                 } else {
+                     helpers::hour(12, false)?.span_to(&helpers::hour(0, false)?, false)?
+                 };
+                 Ok(a.value().intersect(&day_period)?.form(a.value().form.clone()))
+             }
+    );
+    b.rule_2("<time-of-day> in the morning|afternoon",
+             datetime_check!(form!(Form::TimeOfDay(_))),
+             b.reg(r#"(?:(?:[oi]n )?the|this|current) (morning|afternoon|evening)"#)?,
+             |a, text_match| {
+                 let day_period = if text_match.group(1) == "morning" {
+                     helpers::hour(0, false)?.span_to(&helpers::hour(12, false)?, false)?
+                 } else {
+                     helpers::hour(12, false)?.span_to(&helpers::hour(0, false)?, false)?
+                 };
+                 Ok(a.value().intersect(&day_period)?.form(a.value().form.clone()))
+             }
+    );
+    b.rule_2("<time-of-day> tonight",
+             datetime_check!(form!(Form::TimeOfDay(_))),
+             b.reg(r#"(morning|afternoon|evening|tonight)"#)?,
+             |a, text_match| {
+                 let day_period = if text_match.group(1) == "morning" {
                      helpers::hour(0, false)?.span_to(&helpers::hour(12, false)?, false)?
                  } else {
                      helpers::hour(12, false)?.span_to(&helpers::hour(0, false)?, false)?
@@ -1093,7 +1117,7 @@ pub fn rules_cycle(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| CycleValue::new(Grain::Month)
     );
     b.rule_1_terminal("quarter (cycle)",
-                      b.reg(r#"(quarters?"#)?,
+                      b.reg(r#"quarters?"#)?,
                       |_| CycleValue::new(Grain::Quarter)
     );
     b.rule_1_terminal("year (cycle)",
