@@ -530,6 +530,33 @@ pub fn rules_datetime(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
              datetime_check!(|datetime: &DatetimeValue| form!(Form::PartOfDay(_))(datetime) || form!(Form::Meal)(datetime)),
              |a, _, b| a.value().intersect(b.value())
     );
+     b.rule_2("<dim time> de la tarde",
+             datetime_check!(form!(Form::TimeOfDay(_))),
+             b.reg(r#"(?:a|en|de) la tarde"#)?,
+             |datetime, _| {
+                 let period = helpers::hour(12, false)?
+                     .span_to(&helpers::hour(21, false)?, false)?;
+                 datetime.value().intersect(&period)
+             }
+    );
+    b.rule_2("<dim time> de la manana",
+             datetime_check!(form!(Form::TimeOfDay(_))),
+             b.reg(r#"(?:a|en|de) la (?:ma[ñn]ana|madrugada)"#)?,
+             |datetime, _| {
+                 let period = helpers::hour(0, false)?
+                     .span_to(&helpers::hour(12, false)?, false)?;
+                 datetime.value().intersect(&period)
+             }
+    );
+    b.rule_2("<dim time> in the evening",
+             datetime_check!(form!(Form::TimeOfDay(_))),
+             b.reg(r#"de la (?:media)?noche"#)?,
+             |a, _| {
+                 let period = helpers::hour(16, false)?
+                     .span_to(&helpers::hour(0, false)?, false)?;
+                 a.value().intersect(&period)
+             }
+    );
     b.rule_3("<integer> in the <part-of-day>",
              datetime_check!(|datetime: &DatetimeValue| form!(Form::PartOfDay(_))(datetime) || form!(Form::Meal)(datetime)),
              b.reg(r#"(?:a|en|de|por) la"#)?,
