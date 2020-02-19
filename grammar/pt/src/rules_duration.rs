@@ -8,7 +8,7 @@ pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| Ok(UnitOfDurationValue::new(Grain::Second))
     );
     b.rule_1_terminal("minute (unit-of-duration)",
-                      b.reg(r#"minutos?|min"#)?,
+                      b.reg(r#"minutos?"#)?,
                       |_| Ok(UnitOfDurationValue::new(Grain::Minute))
     );
     b.rule_1_terminal("hour (unit-of-duration)",
@@ -49,7 +49,7 @@ pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
     );
     b.rule_3("<number> h <number>",
              integer_check_by_range!(0),
-             b.reg(r#"h(?:oras?)?"#)?,
+             b.reg(r#"horas?"#)?,
              integer_check_by_range!(0,59),
              |hour, _, minute| {
                  let hour_period = Period::from(PeriodComp::new(Grain::Hour, hour.value().clone().value));

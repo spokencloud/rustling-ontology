@@ -167,10 +167,10 @@ pub fn examples_datetime(v: &mut Vec<::rustling::train::Example<Dimension>>) {
     example!(v, check_moment!(c, [2013, 2, 13, 00, 03]), "à zero hora e três minutos");
     //Is today at midnight 13/12 or 12/12 ?
     //example!(v, check_moment!(c, [2013, 2, 13, 00, 03]), "hoje à meia-noite e três");
-    example!(v, check_moment!(c, [2013, 2, 12, 15, 15]), "às quinze e quinze", "às quinze horas e quinze minutos", "às três e quinze da tarde", "15:15", "15h15");
+    example!(v, check_moment!(c, [2013, 2, 12, 15, 15]), "às quinze e quinze", "às quinze horas e quinze minutos", "às três e quinze da tarde");
     example!(v, check_moment!(c, [2013, 2, 13, 15, 15]), "amanhã às três e quinze da tarde");
-    example!(v, check_moment!(c, [2013, 2, 12, 15, 30]), "às quinze e trinta", "às quinze horas e trinta minutos", "às três e meia da tarde", "15:30", "15h30");
-    example!(v, check_moment!(c, [2013, 2, 12, 11, 45]), "às quinze para o meio-dia", "11:45", "às onze horas e quarenta e cinco minutos", "hoje às 11h45");
+    example!(v, check_moment!(c, [2013, 2, 12, 15, 30]), "às quinze e trinta", "às quinze horas e trinta minutos", "às três e meia da tarde");
+    example!(v, check_moment!(c, [2013, 2, 12, 11, 45]), "às quinze para o meio-dia", "às onze horas e quarenta e cinco minutos");
 
     // Day + day time
     example!(v, check_moment!(c, [2013, 3, 2, 5, 0]), "2 de março às 5:00");
@@ -341,8 +341,8 @@ pub fn examples_durations(v: &mut Vec<::rustling::train::Example<Dimension>>) {
     example!(v, check_duration!([0, 1, 0]), "durante um mês", "por um mês");
     example!(v, check_duration!([1]), "durante um ano", "por um ano");
     example!(v, check_duration!([0, 0, 0, 0, 0, 1, 3]), "durante um minuto e três segundos", "um minuto e três segundos");
-    example!(v, check_duration!([0, 0, 0, 0, 1, 30], Precision::Approximate), "cerca de uma hora e meia", "uma hora e meia mais ou menos", "uma hora e meia aproximadamente", "por volta de 1h30");
+    example!(v, check_duration!([0, 0, 0, 0, 1, 30], Precision::Approximate), "cerca de uma hora e meia", "uma hora e meia mais ou menos", "uma hora e meia aproximadamente");
     example!(v, check_duration!([0, 0, 0, 0, 0, 15], Precision::Approximate), "durante um quarto de hora mais o menos", "aproximadamente durante um quarto de hora");
     example!(v, check_duration!([0, 0, 0, 0, 1]), "durante uma hora", "por uma hora");
-    example!(v, check_duration!([0, 0, 2]), "durante 2 semanas", "por duas semanas");
+    example!(v, check_duration!([0, 0, 2]), "por duas semanas");
 }
