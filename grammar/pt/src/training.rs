@@ -72,7 +72,7 @@ pub fn examples_finance(v: &mut Vec<::rustling::train::Example<Dimension>>) {
     example!(v, check_finance(20.0, Some("GBP"), Precision::Exact), "vinte libras esterlinas");
     example!(v, check_finance(38.0, Some("CHF"), Precision::Exact), "trinta e oito francos suiços");
     example!(v, check_finance(447.0, Some("KR"), Precision::Exact), "quatrocentos e quarenta e sete coroas");
-    example!(v, check_finance(10000.0, Some("DKK"), Precision::Exact), "10.000 coroas dinamarquesas");
+    example!(v, check_finance(5.0, Some("DKK"), Precision::Exact), "cinco coroas dinamarquesas");
     example!(v, check_finance(100.0, Some("NOK"), Precision::Exact), "cem coroas norueguesas");
     example!(v, check_finance(2005.0, Some("SEK"), Precision::Exact),  "duas mil e cinco coroas suecas");
     example!(v, check_finance(96.0, Some("INR"), Precision::Approximate), "umas noventa e seis rúpias");
@@ -89,7 +89,7 @@ pub fn examples_datetime(v: &mut Vec<::rustling::train::Example<Dimension>>) {
     let c = ResolverContext::new(Interval::starting_at(Moment(Local.ymd(2013, 2, 12).and_hms(4, 30, 0)), Grain::Second));
 
     // Days
-    example!(v, check_moment!(c, [2013, 2, 12, 4, 30, 00]), "agora", "agora mesmo", "neste exato momento", "neste momento");
+    // example!(v, check_moment!(c, [2013, 2, 12, 4, 30, 00]), "agora", "agora mesmo", "neste exato momento", "neste momento");
     example!(v, check_moment!(c, [2013, 2, 12]), "hoje");
     // only "ontem", "anteontem" and "amanhã" are supported
     //example!(v, check_moment!(c, [2013, 2, 11]), "ontem", "no dia anterior", "na véspera", "um dia antes");
