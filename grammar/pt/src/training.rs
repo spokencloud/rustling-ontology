@@ -4,7 +4,7 @@ use rustling_ontology_values::dimension::*;
 use rustling_ontology_values::ResolverContext;
 
 pub fn examples_numbers(v: &mut Vec<::rustling::train::Example<Dimension>>) {
-    example!(v, check_integer(1), "1", "+1", "um", "uma");
+    example!(v, check_integer(1), "um", "uma");
     example!(v, check_integer(11), "onze");
     example!(v, check_integer(17), "dezessete");
     example!(v, check_integer(21), "vinte e um");
@@ -22,22 +22,22 @@ pub fn examples_numbers(v: &mut Vec<::rustling::train::Example<Dimension>>) {
     example!(v, check_integer(21011), "vinte e um mil e onze");
     example!(v, check_integer(721012), "setecentos e vinte e um mil e doze");
     example!(v, check_integer(31256721), "trinta e um milhões duzentos e cinquenta e seis mil setecentos e vinte e um");
-    example!(v, check_integer(33), "33", "trinta e três");
-    example!(v, check_integer(100000), "100.000", "100000", "100K", "100k", "cem mil");
+    example!(v, check_integer(33), "trinta e três");
+    example!(v, check_integer(100000), "cem mil");
     // TODO: Check if want/need support for M = 1000000 ?
     //example!(v, check_integer(3000000), "3M", "3000000", "3.000.000", "três milhões");
     //example!(v, check_integer(1200000), "1.200.000", "1200000", "1,2M", "um milhão e duzentos mil");
     //example!(v, check_integer(-1200000), "- 1.200.000", "-1200000", "menos 1200000", "-1,2M", "menos um milhão e duzentos mil");
-    example!(v, check_float(1.1), "1,1", "1,10", "um vírgula um", "um vírgula dez");
-    example!(v, check_float(0.5), "0,5", "0,50", "zero vírgula cinco", "zero vírgula cinquenta");
-    example!(v, check_float(0.3), "0,3", "0,30", "zero vírgula três");
-    example!(v, check_float(0.03), "0,03", "zero vírgula zero três");
-    example!(v, check_float(32.75), "32,75", "trinta e dois vírgula setenta e cinco");
-    example!(v, check_float(10.08), "10,08", "dez vírgula zero oito");
-    example!(v, check_ordinal(1), "1o", "1a", "primeiro", "primeira", "1º", "1ª");
-    example!(v, check_ordinal(3), "3o", "3a", "3º", "3ª", "terceiro", "terceira");
-    example!(v, check_ordinal(2), "segundo", "2º", "2o");
-    example!(v, check_ordinal(5), "quinto", "5º", "5o");
+    example!(v, check_float(1.1), "um vírgula um", "um vírgula dez");
+    example!(v, check_float(0.5), "zero vírgula cinco", "zero vírgula cinquenta");
+    example!(v, check_float(0.3), "zero vírgula três");
+    example!(v, check_float(0.03),  "zero vírgula zero três");
+    example!(v, check_float(32.75), "trinta e dois vírgula setenta e cinco");
+    example!(v, check_float(10.08), "dez vírgula zero oito");
+    example!(v, check_ordinal(1), "primeiro", "primeira");
+    example!(v, check_ordinal(3), "terceiro", "terceira");
+    example!(v, check_ordinal(2), "segundo");
+    example!(v, check_ordinal(5), "quinto");
 }
 
 pub fn examples_percentage(v: &mut Vec<::rustling::train::Example<Dimension>>) {
