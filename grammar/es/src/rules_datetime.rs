@@ -1131,7 +1131,7 @@ pub fn rules_cycle(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| CycleValue::new(Grain::Hour)
     );
     b.rule_1_terminal("day (cycle)",
-                      b.reg(r#"d[iíì]as?"#)?,
+                      b.reg(r#"d[iíì]as?(?: h[aá]b[iíì]le?s?)?"#)?,
                       |_| CycleValue::new(Grain::Day)
     );
     b.rule_1_terminal("week (cycle)",
