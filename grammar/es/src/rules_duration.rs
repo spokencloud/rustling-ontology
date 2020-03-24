@@ -20,7 +20,7 @@ pub fn rules_duration(b: &mut RuleSetBuilder<Dimension>) -> RustlingResult<()> {
                       |_| Ok(UnitOfDurationValue::new(Grain::Hour))
     );
     b.rule_1_terminal("day (unit-of-duration)",
-                      b.reg(r#"d[iíì]as?"#)?,
+                      b.reg(r#"d[iíì]as?(?: h[aá]b[iíì]le?s?)?"#)?,
                       |_| Ok(UnitOfDurationValue::new(Grain::Day))
     );
     b.rule_1_terminal("week (unit-of-duration)",
